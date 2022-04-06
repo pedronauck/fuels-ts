@@ -32,6 +32,8 @@ abi TestContract {
   fn return_void();
   fn return_context_amount() -> u64;
   fn return_context_asset() -> b256;
+  fn get_small_string() -> str[8];
+  fn get_large_string() -> str[9];
 }
 
 impl TestContract for Contract {
@@ -82,5 +84,13 @@ impl TestContract for Contract {
   }
   fn return_context_asset() -> b256 {
     (msg_asset_id()).into()
+  }
+  fn get_small_string() -> str[8] {
+    let my_string: str[8] = "gggggggg";
+    my_string
+  }
+  fn get_large_string() -> str[9] {
+    let my_string: str[9] = "ggggggggg";
+    my_string
   }
 }

@@ -188,4 +188,36 @@ describe('TestContractTwo', () => {
     });
     expect(result).toBe(assetId);
   });
+
+  it('Call contract method with small string return', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'get_small_string',
+        outputs: [
+          {
+            type: 'str[8]',
+          },
+        ],
+      },
+    ]);
+    const result = await contract.functions.get_small_string();
+    expect(result).toBe('gggggggg');
+  });
+
+  it('Call contract method with big string return', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'get_large_string',
+        outputs: [
+          {
+            type: 'str[9]',
+          },
+        ],
+      },
+    ]);
+    const result = await contract.functions.get_large_string();
+    expect(result).toBe('ggggggggg');
+  });
 });
