@@ -5,7 +5,7 @@ import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
-import type { TransactionRequest } from '@fuel-ts/providers';
+import type { Coin, TransactionRequest } from '@fuel-ts/providers';
 import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -21,6 +21,7 @@ export type Overrides = Partial<{
   amount: BigNumberish;
   assetId: BytesLike;
   variableOutputs: number;
+  inputs: ReadonlyArray<Coin>;
 }>;
 
 const logger = new Logger('0.0.1');
@@ -38,7 +39,7 @@ export const buildTransaction = (
   func: FunctionFragment,
   args: Array<any>
 ): ScriptTransactionRequest => {
-  const overrides = getOverrides(func, args);
+  const { inputs, ...overrides } = getOverrides(func, args);
   const data = contract.interface.encodeFunctionData(func, args);
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
@@ -52,6 +53,9 @@ export const buildTransaction = (
   });
   request.addContract(contract);
   request.addVariableOutputs(overrides.variableOutputs || 0);
+  if (inputs) {
+    request.addCoins(inputs);
+  }
 
   return request;
 };
@@ -82,6 +86,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
 
     const request = await buildTransaction(contract, func, args);
     await contract.wallet.fund(request);
+    console.log('request', request);
     const response = await contract.wallet.sendTransaction(request);
     const result = await response.wait();
     const encodedResult = contractCallScript.decodeScriptResult(result);
