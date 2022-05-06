@@ -41,6 +41,8 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
+    "@auto-it/conventional-commits": "^10.36.5",
+    "@auto-it/npm": "^10.36.5",
     "@jest/types": "^28.0.2",
     "@qiwi/multi-semantic-release": "^3.17.1",
     "@semantic-release/changelog": "^6.0.1",
@@ -57,6 +59,7 @@
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "auto": "^10.36.5",
     "conventional-changelog-conventionalcommits": "^4.6.3",
     "dotenv": "^9.0.2",
     "eslint": "^8.4.1",
